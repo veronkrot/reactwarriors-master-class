@@ -9,20 +9,20 @@ class MovieItem extends React.Component {
     }
 
     render() {
-        const {movie, removeMovie, addMovieToWillWatch, removeMovieToWillWatch} = this.props;
+        const {movie: data, deleteMovie, addMovieToWillWatch, deleteMovieFromWillWatch} = this.props;
         let willWatch = this.state.willWatch;
         return (
             <div className="card">
                 <img
                     className="card-img-top"
-                    src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path ||
-                    movie.poster_path}`}
+                    src={`https://image.tmdb.org/t/p/w500${data.backdrop_path ||
+                    data.poster_path}`}
                     alt=""
                 />
                 <div className="card-body">
-                    <h6 className="card-title">{movie.title}</h6>
+                    <h6 className="card-title">{data.title}</h6>
                     <div className="d-flex justify-content-between align-items-center">
-                        <p className="mb-0">Rating: {movie.vote_average}</p>
+                        <p className="mb-0">Rating: {data.vote_average}</p>
                             <button
                                 type="button"
                                 className={willWatch ? "btn btn-success" : "btn btn-info"}
@@ -31,15 +31,17 @@ class MovieItem extends React.Component {
                                         willWatch: !willWatch
                                     });
                                     if (!willWatch) {
-                                        addMovieToWillWatch(movie);
+                                        addMovieToWillWatch(data);
                                     } else {
-                                        removeMovieToWillWatch(movie);
+                                        deleteMovieFromWillWatch(data);
                                     }
                                 }}>
                                 {willWatch ? "Remove Will Watch" : "Will Watch"}
                             </button>
                     </div>
-                    <button onClick={removeMovie.bind(null, movie)}
+                    <button onClick={() => {
+                        deleteMovie(data)
+                    }}
                             type="button"
                             className="btn btn-secondary">
                         Delete movie

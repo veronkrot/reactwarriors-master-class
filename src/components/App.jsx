@@ -1,16 +1,27 @@
 import React from "react";
+import {API_URL, API_KEY_3} from "./../utils/api"
 import MovieItem from "./MovieItem";
 
 class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            movies: moviesData,
+            movies: [],
             moviesWillWatch: []
         };
     }
 
-    removeMovie = (movie) => {
+    componentDidMount() {
+        fetch(`${API_URL}/discover/movie?api_key=${API_KEY_3}`).then((response) => {
+            return response.json()
+        }).then((data) => {
+            this.setState({
+                movies: data.results
+            })
+        })
+    }
+
+    deleteMovie = (movie) => {
         const updateMovies = this.state.movies.filter(function (item) {
             return item.id !== movie.id;
         });
@@ -30,24 +41,26 @@ class App extends React.Component {
 
     };
 
-    removeMovieToWillWatch = (movie) => {
-        const updateMoviesWillWatch = this.state.moviesWillWatch.filter(function (item) {
-            return item.id !== movie.id;
-        });
+    deleteMovieFromWillWatch = (movie) => {
+        const updateMoviesWillWatch = this.state.moviesWillWatch.filter(
+            item => item.id !== movie.id
+        );
+
         this.setState({
-            moviesWillWatch: updateMoviesWillWatch,
+            moviesWillWatch: updateMoviesWillWatch
         });
     };
 
     renderMoviesWillWatch() {
         return this.state.moviesWillWatch.map(movie => (
-        <li key={movie.id} className="list-group-item">
-            <div className="d-flex justify-content-between">
-                <p>{movie.title}</p>
-                <p>{movie.vote_average}</p>
-            </div>
-        </li>
-    ))}
+            <li key={movie.id} className="list-group-item">
+                <div className="d-flex justify-content-between">
+                    <p>{movie.title}</p>
+                    <p>{movie.vote_average}</p>
+                </div>
+            </li>
+        ))
+    }
 
     render() {
         return (<div className="container">
@@ -60,9 +73,9 @@ class App extends React.Component {
                                         <MovieItem
                                             key={movie.id}
                                             movie={movie}
-                                            removeMovie={this.removeMovie}
+                                            removeMovie={this.deleteMovie}
                                             addMovieToWillWatch={this.addMovieToWillWatch}
-                                            removeMovieToWillWatch={this.removeMovieToWillWatch}/>
+                                            deleteMovieFromWillWatch ={this.deleteMovieFromWillWatch}/>
                                     </div>
                                 );
                             })}
