@@ -1,5 +1,4 @@
 import React from "react";
-import {moviesData} from '../moviesData';
 import MovieItem from "./MovieItem";
 
 class App extends React.Component {
@@ -40,6 +39,16 @@ class App extends React.Component {
         });
     };
 
+    renderMoviesWillWatch() {
+        return this.state.moviesWillWatch.map(movie => (
+        <li key={movie.id} className="list-group-item">
+            <div className="d-flex justify-content-between">
+                <p>{movie.title}</p>
+                <p>{movie.vote_average}</p>
+            </div>
+        </li>
+    ))}
+
     render() {
         return (<div className="container">
                 <div className="row">
@@ -61,6 +70,9 @@ class App extends React.Component {
                     </div>
                     <div className="col-3">
                         <p>Will Watch: {this.state.moviesWillWatch.length}</p>
+                        <ul className="list-group">
+                            {this.renderMoviesWillWatch()}
+                        </ul>
                     </div>
                 </div>
             </div>
