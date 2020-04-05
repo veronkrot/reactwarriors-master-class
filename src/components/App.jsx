@@ -1,18 +1,20 @@
 import React from "react";
 import {API_URL, API_KEY_3} from "./../utils/api"
 import MovieItem from "./MovieItem";
+import MovieTabs from "./MovieTabs";
 
 class App extends React.Component {
     constructor() {
         super();
         this.state = {
             movies: [],
-            moviesWillWatch: []
+            moviesWillWatch: [],
+            sort_by: "popularity.desc"
         };
     }
 
     componentDidMount() {
-        fetch(`${API_URL}/discover/movie?api_key=${API_KEY_3}`).then((response) => {
+        fetch(`${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${this.state.sort_by}`).then((response) => {
             return response.json()
         }).then((data) => {
             this.setState({
@@ -51,7 +53,7 @@ class App extends React.Component {
         });
     };
 
-    renderMoviesWillWatch() {
+    renderMoviesWillWatch = () => {
         return this.state.moviesWillWatch.map(movie => (
             <li key={movie.id} className="list-group-item">
                 <div className="d-flex justify-content-between">
@@ -62,10 +64,23 @@ class App extends React.Component {
         ))
     }
 
+    updateSortBy = value => {
+        this.setState({
+            sort_by: value
+        });
+    };
+
     render() {
         return (<div className="container">
                 <div className="row">
                     <div className="col-9">
+                        <div className="row mb-4">
+                            <div className="col-12">
+                                <MovieTabs sort_by={this.state.sort_by}
+                                           updateSortBy={this.updateSortBy}
+                                />
+                            </div>
+                        </div>
                         <div className="row">
                             {this.state.movies.map(movie => {
                                 return (
@@ -75,7 +90,7 @@ class App extends React.Component {
                                             movie={movie}
                                             removeMovie={this.deleteMovie}
                                             addMovieToWillWatch={this.addMovieToWillWatch}
-                                            deleteMovieFromWillWatch ={this.deleteMovieFromWillWatch}/>
+                                            deleteMovieFromWillWatch={this.deleteMovieFromWillWatch}/>
                                     </div>
                                 );
                             })}
