@@ -11,12 +11,22 @@ class MovieItem extends React.Component {
     render() {
         const {movie: data, deleteMovie, addMovieToWillWatch, deleteMovieFromWillWatch} = this.props;
         let willWatch = this.state.willWatch;
+
+        const getImgSrc = () => {
+            if (data.backdrop_path === null ||
+                data.poster_path === null) {
+                return "https://simrussia.com/wp-content/uploads/2018/04/no-image.jpg"
+            } else {
+                return `https://image.tmdb.org/t/p/w500${data.backdrop_path ||
+                data.poster_path}`
+            }
+        };
+
         return (
             <div className="card">
                 <img
                     className="card-img-top"
-                    src={`https://image.tmdb.org/t/p/w500${data.backdrop_path ||
-                    data.poster_path}`}
+                    src={getImgSrc()}
                     alt=""
                 />
                 <div className="card-body">
