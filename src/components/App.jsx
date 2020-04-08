@@ -2,6 +2,7 @@ import React from "react";
 import {API_URL, API_KEY_3} from "./../utils/api"
 import MovieItem from "./MovieItem";
 import MovieTabs from "./MovieTabs";
+import MovieWillWatch from "./MovieWillWatch";
 
 class App extends React.Component {
     constructor() {
@@ -9,7 +10,7 @@ class App extends React.Component {
         this.state = {
             movies: [],
             moviesWillWatch: [],
-            sort_by: "popularity.desc"
+            sort_by: "popularity.desc",
         };
     }
 
@@ -32,24 +33,12 @@ class App extends React.Component {
         }
     }
 
-    deleteMovie = (movie) => {
-        const updateMovies = this.state.movies.filter(function (item) {
-            return item.id !== movie.id;
-        });
-        this.setState({
-            movies: updateMovies,
-        });
-    };
-
     addMovieToWillWatch = (movie) => {
         const updateMoviesWillWatch = [...this.state.moviesWillWatch];
-        if (!updateMoviesWillWatch.includes(movie)) {
             updateMoviesWillWatch.push(movie);
             this.setState({
                 moviesWillWatch: updateMoviesWillWatch
             });
-        } else alert(`${movie.title} exists in the Will Watch list!`)
-
     };
 
     deleteMovieFromWillWatch = (movie) => {
@@ -64,12 +53,10 @@ class App extends React.Component {
 
     renderMoviesWillWatch = () => {
         return this.state.moviesWillWatch.map(movie => (
-            <li key={movie.id} className="list-group-item">
-                <div className="d-flex justify-content-between">
-                    <p>{movie.title}</p>
-                    <p>{movie.vote_average}</p>
-                </div>
-            </li>
+            <MovieWillWatch
+                movie={movie}
+                key={movie.id}
+            />
         ))
     };
 
@@ -80,7 +67,7 @@ class App extends React.Component {
     };
 
     render() {
-        return (<div className="container">
+        return (<div className="container mt-6">
                 <div className="row">
                     <div className="col-9">
                         <div className="row mb-4">
@@ -95,9 +82,8 @@ class App extends React.Component {
                                 return (
                                     <div className="col-6 mb-4" key={`col-${movie.id}`}>
                                         <MovieItem
-                                            key={movie.id}
+                                            key={`${movie.id}M`}
                                             movie={movie}
-                                            removeMovie={this.deleteMovie}
                                             addMovieToWillWatch={this.addMovieToWillWatch}
                                             deleteMovieFromWillWatch={this.deleteMovieFromWillWatch}/>
                                     </div>
@@ -111,6 +97,7 @@ class App extends React.Component {
                             {this.renderMoviesWillWatch()}
                         </ul>
                     </div>
+
                 </div>
             </div>
         );

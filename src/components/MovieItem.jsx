@@ -9,7 +9,7 @@ class MovieItem extends React.Component {
     }
 
     render() {
-        const {movie: data, deleteMovie, addMovieToWillWatch, deleteMovieFromWillWatch} = this.props;
+        const {movie: data, addMovieToWillWatch, deleteMovieFromWillWatch} = this.props;
         let willWatch = this.state.willWatch;
 
         const getImgSrc = () => {
@@ -34,6 +34,7 @@ class MovieItem extends React.Component {
                     <div className="d-flex justify-content-between align-items-center">
                         <p className="mb-0">Rating: {data.vote_average}</p>
                             <button
+                                id={data.id}
                                 type="button"
                                 className={willWatch ? "btn btn-success" : "btn btn-info"}
                                 onClick={() => {
@@ -49,13 +50,6 @@ class MovieItem extends React.Component {
                                 {willWatch ? "Remove Will Watch" : "Will Watch"}
                             </button>
                     </div>
-                    <button onClick={() => {
-                        deleteMovie(data)
-                    }}
-                            type="button"
-                            className="btn btn-secondary">
-                        Delete movie
-                    </button>
                 </div>
             </div>
         )
